@@ -21,6 +21,11 @@ public class Loja {
         @Column(nullable = false, unique = true)
         private String cnpj;
 
+        
+
+        public Loja() {
+        }
+
         public Long getId() {
                 return id;
         }

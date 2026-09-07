@@ -28,6 +28,11 @@ public class PedidoItem {
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
+    
+
+    public PedidoItem() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -30,6 +30,18 @@ public class Produto {
     @JoinColumn(name = "loja_id", nullable = false)
     private Loja loja;
 
+    public Produto(Long id, String nome, String descricao, Double preco, Loja loja) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.loja = loja;
+    }
+
+    public Produto() {
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -69,14 +81,5 @@ public class Produto {
     public void setLoja(Loja loja) {
         this.loja = loja;
     }
-
-    public Produto(Long id, String nome, String descricao, Double preco, Loja loja) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.preco = preco;
-        this.loja = loja;
-    }
-
     
 }

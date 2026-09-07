@@ -1,5 +1,6 @@
 package com.edu.ifce.pecaai.controller;
 
+import com.edu.ifce.pecaai.dto.ProdutoRequestDTO;
 import com.edu.ifce.pecaai.entities.Produto;
 import com.edu.ifce.pecaai.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,9 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(produto));
+    public ResponseEntity<Produto> criar(@RequestBody ProdutoRequestDTO dto) {
+        Produto produtoSalvo = produtoService.salvar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
     }
 
     @DeleteMapping("/{id}")

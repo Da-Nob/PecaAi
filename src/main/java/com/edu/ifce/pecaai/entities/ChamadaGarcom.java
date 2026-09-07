@@ -27,6 +27,11 @@ public class ChamadaGarcom {
     @JoinColumn(name = "loja_id", nullable = false)
     private Loja loja;
 
+    
+
+    public ChamadaGarcom() {
+    }
+
     public Long getId() {
         return id;
     }
