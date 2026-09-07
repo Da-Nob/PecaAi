@@ -1,96 +1,123 @@
 package com.edu.ifce.pecaai.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "tb_usuario")
-public class Usuario {
+@Table(name = "usuarios")
+public class Usuario implements UserDetails {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Column(nullable = false)
-        private String nome;
+    private String nome;
 
-        @Column(nullable = false, unique = true)
-        private String email;
+    @Column(unique = true, nullable = false)
+    private String email;
 
-        @Column(nullable = false)
-        private String senha;
+    private String senha;
 
-        
-        public enum TipoUsuario {
-            GERENTE,
-            USUARIO,
-            GARCOM
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    // --- CONSTRUTORES ---
+
+    public Usuario() {}
+
+    public Usuario(String nome, String email, String senha, UserRole role) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.role = role;
+    }
+
+    // --- MÉTODOS OBRIGATÓRIOS DO USERDETAILS ---
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == UserRole.ADMIN) {
+            return List.of(
+                new SimpleGrantedAuthority("ROLE_ADMIN"),
+                new SimpleGrantedAuthority("ROLE_GARCOM"),
+                new SimpleGrantedAuthority("ROLE_CLIENTE")
+            );
+        } else if (this.role == UserRole.GARCOM) {
+            return List.of(
+                new SimpleGrantedAuthority("ROLE_GARCOM"),
+                new SimpleGrantedAuthority("ROLE_CLIENTE")
+            );
+        } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
         }
+    }
 
-        @Enumerated(EnumType.STRING)
-        @Column(nullable = false)
-        private TipoUsuario tipo;
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
 
-        
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 
-        public Usuario() {
-        }
+    @Override
+    public boolean isAccountNonExpired() { return true; }
 
-        public Long getId() {
-            return id;
-        }
+    @Override
+    public boolean isAccountNonLocked() { return true; }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
 
-        public String getNome() {
-            return nome;
-        }
+    @Override
+    public boolean isEnabled() { return true; }
 
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
+    // --- GETTERS E SETTERS ---
 
-        public String getEmail() {
-            return email;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public String getSenha() {
-            return senha;
-        }
+    public String getNome() {
+        return nome;
+    }
 
-        public void setSenha(String senha) {
-            this.senha = senha;
-        }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-        public TipoUsuario getTipo() {
-            return tipo;
-        }
+    public String getEmail() {
+        return email;
+    }
 
-        public void setTipo(TipoUsuario tipo) {
-            this.tipo = tipo;
-        }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-        public Usuario(Long id, String nome, String email, String senha, TipoUsuario tipo) {
-            this.id = id;
-            this.nome = nome;
-            this.email = email;
-            this.senha = senha;
-            this.tipo = tipo;
-        }
+    public String getSenha() {
+        return senha;
+    }
 
-        
-        
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 }
