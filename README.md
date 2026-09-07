@@ -208,6 +208,64 @@ Guarde o `id` gerado para o produto (ex: `2`).
 
 ---
 
+## 💻 Como Rodar o Projeto Localmente
+
+### Pré-requisitos
+- **Java 21** ou superior instalado
+- **Maven** instalado
+- Banco de dados **PostgreSQL** rodando localmente
+
+### Passo a Passo
+
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/Da-Nob/PecaAi.git](https://github.com/Da-Nob/PecaAi.git)
+   cd PecaAi
+
+2. **Configure o Banco de Dados:**
+Crie um banco de dados no PostgreSQL chamado pecaai:
+
+SQL
+
+CREATE DATABASE pecaai;
+
+3. **Configure as Variáveis de Ambiente:**
+
+Ajuste as credenciais no arquivo src/main/resources/application.properties ou defina no seu ambiente:
+
+SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/pecaai
+
+SPRING_DATASOURCE_USERNAME: seu_usuario
+
+SPRING_DATASOURCE_PASSWORD: sua_senha
+
+JWT_SECRET: sua_chave_secreta
+
+
+4. **Instale as dependências e rode a aplicação:**
+
+Bash
+./mvnw spring-boot:run
+A API estará acessível em http://localhost:8080
+
+---
+
+## 🗺️ Tabela Rápida de Endpoints
+
+| Método | Rota | Descrição | Rota Pública? | Permissão Mínima |
+| :--- | :--- | :--- | :---: | :---: |
+| `POST` | `/auth/register` | Cadastra novo usuário | Sim | Qualquer |
+| `POST` | `/auth/login` | Autentica e gera Token | Sim | Qualquer |
+| `POST` | `/lojas` | Cadastra nova loja | Não | Logado |
+| `GET` | `/lojas` | Lista todas as lojas | Não | Logado |
+| `POST` | `/produtos` | Cadastra produto no cardápio | Não | **ADMIN** |
+| `GET` | `/produtos` | Lista todos os produtos | Não | Logado |
+| `POST` | `/pedidos` | Cria um novo pedido | Não | Logado |
+| `POST` | `/chamadas` | Solicita atendimento de mesa | Não | Logado |
+| `PUT` | `/chamadas/{id}/atender` | Garçom atende a mesa | Não | Logado |
+
+---
+
 ## 📋 Limitações conhecidas (para o relatório/próximos passos)
 
 - `POST /usuarios` não criptografa a senha — prefira sempre `/auth/register` para criar usuários.
